@@ -6,8 +6,6 @@
   scroll-behavior: smooth;
 }
 
-
-
 body {
   background-color: #f6f6f6;
   color: #333;
@@ -68,7 +66,6 @@ body {
   animation: fadeIn 0.4s ease;
 }
 
-
 .menu-links.active {
   display: flex;
 }
@@ -96,73 +93,61 @@ body {
   color: #6a5acd;
 }
 
-/* bloco 1 */
+/* ===== BLOCO 1 (corrigido e responsivo) ===== */
 .bloco1 {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: clamp(20px, 5vw, 70px) 6%;
+  flex-wrap: wrap;
+  padding: clamp(40px, 6vw, 90px) 8%;
   background-color: #fff;
-  gap: 40px;
+  gap: 60px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
+/* Texto do bloco 1 */
 .bloco1 .inicio {
-  flex: 1 1 400px;
-  text-align: justify; 
+  flex: 1 1 480px;
+  text-align: left;
 }
 
+/* Título */
 .bloco1 h1 {
-  font-size: clamp(26px, 2.6vw, 40px);
-  color: #333;
-  margin-bottom: 15px;
-  text-align: center; 
-  margin-left: 50px;
+  font-size: clamp(28px, 2.8vw, 44px);
+  color: #2c2c2c;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
+/* Parágrafo */
 .bloco1 p {
-  font-size: clamp(15px, 1.3vw, 20px);
+  font-size: clamp(16px, 1.3vw, 20px);
   color: #555;
   max-width: 550px;
-  line-height: 1.6;
-  margin: 0 auto 25px;
-  text-align: justify; 
-   margin-left: 50px;
+  margin-bottom: 30px;
+  line-height: 1.7;
 }
 
-.btn-iniciar {
-  display: block; 
-  margin: 0 auto;
-  padding: clamp(10px, 1vw, 15px) clamp(30px, 3vw, 50px);
-  background-color: #7b63b6;
-  border: none;
-  border-radius: 25px;
-  color: #fff;
-  font-size: clamp(15px, 1.2vw, 20px);
-  font-weight: 500;
-  text-decoration: none;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.btn-iniciar:hover {
-  background-color: #6a52a3;
-  transform: scale(1.05);
-}
-
+/* Imagem */
 .bloco1 .img1 {
-  flex: 1 1 350px;
+  flex: 1 1 420px;
   text-align: center;
   margin-right: 10px;
 }
 
 .cadeado {
-  width: clamp(220px, 20vw, 330px);
+  width: clamp(250px, 25vw, 400px);
   max-width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
 }
 
+.cadeado:hover {
+  transform: scale(1.05);
+}
 
+/* ===== resto do CSS (mantido) ===== */
 
 /* BLOCO 2 */
 .bloco2 {
@@ -248,7 +233,7 @@ body {
   margin-bottom: 40px;
 }
 
-/* BOTÃO */
+/* BOTÃO (mantive como estava para não alterar comportamento global) */
 .btn-iniciar {
   display: flex;
   justify-content: center;
@@ -323,11 +308,11 @@ footer a:hover {
   color: #1b1b1b;
 }
 
-/* Responsivel para telas menores */
+/* Responsivel para telas menores (ajustes específicos para bloco1 mantidos aqui) */
 @media (max-width: 992px) {
   .bloco1 {
-    gap: 25px;
-    padding: 40px 5%;
+    gap: 40px;
+    padding: 60px 6%;
   }
 
   .bloco1 .inicio {
@@ -344,33 +329,45 @@ footer a:hover {
   }
 }
 
-
 @media (max-width: 768px) {
-  /*Mantém texto e imagem lado a lado*/
   .bloco1 {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    text-align: left;
-    gap: 20px;
+    flex-direction: column;
+    text-align: center;
+    padding: 50px 6%;
+    gap: 35px;
   }
 
   .bloco1 .inicio {
-    flex: 1;
+    text-align: center;
+    flex: 1 1 100%;
+  }
+
+  .bloco1 h1 {
+    text-align: center;
+    font-size: clamp(24px, 6vw, 32px);
+  }
+
+  .bloco1 p {
+    text-align: center;
+    font-size: clamp(15px, 4vw, 18px);
+    margin: 0 auto 25px;
+  }
+
+  .btn-iniciar {
+    margin: 0 auto;
   }
 
   .bloco1 .img1 {
-    flex: 1;
-    text-align: center;
+    order: 2;
+    flex: 1 1 100%;
   }
 
   .cadeado {
-    width: 80%;
-    max-width: 280px;
+    width: 75%;
+    max-width: 320px;
   }
 
-  /*Ícones em linha reta e com rolagem horizontal */
+  /*Ícones em linha reta e com rolagem horizontal (mantive seu comportamento) */
   .icons-box {
     flex-wrap: nowrap;
     overflow-x: auto;
