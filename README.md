@@ -26,7 +26,11 @@ JavaScript → interatividade e dinamismo
 🖥️ Funcionalidades
 
 ✅ Página inicial com introdução sobre cibersegurança
+
 ✅ Seção educativa com tópicos explicativos
+
 ✅ Quiz interativo para testar o conhecimento do usuário
+
 ✅ Página de dicas rápidas de segurança
+
 ✅ Layout responsivo (funciona em computador e celular)
