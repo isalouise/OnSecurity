@@ -392,7 +392,7 @@ footer a:hover {
   }
 
   .nav {
-    max-width: 1600px;
+    max-width: auto;
     padding: 25px 100px;
   }
 
@@ -455,4 +455,5 @@ footer a:hover {
     transform: translateY(0);
   }
 }
+
 
