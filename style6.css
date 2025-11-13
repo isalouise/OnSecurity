@@ -14,6 +14,7 @@ body {
 }
 
 /* NAV */
+ 
 .nav {
   display: flex;
   justify-content: space-between;
@@ -21,10 +22,7 @@ body {
   padding: clamp(15px, 2vw, 25px) clamp(30px, 5vw, 60px);
   background-color: #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
   z-index: 10;
-  max-width: 1800px;
-  margin: 0 auto;
   width: 100%;
 }
 
@@ -248,85 +246,35 @@ footer a:hover {
   }
 }
 
-/* === AJUSTES PARA TELAS GRANDES (1920x1080 e superiores) === */
+
 @media (min-width: 1600px) {
   body {
     font-size: 18px;
   }
-
   .nav {
-    padding: 30px 100px;
-    max-width: 1600px;
-    margin: 0 auto;
+    max-width: 100%;
+    padding: 30px 120px;
   }
-
   .logo {
-    width: 200px;
+    width: 220px;
   }
-
-  .menu-icon {
-    font-size: 36px;
-  }
-
   .card {
-    max-width: 1100px;
-    padding: 60px 80px;
-    margin: 80px auto;
+    max-width: 1300px;
+    padding: 70px 100px;
+    margin: 100px auto;
   }
-
-  .card h1 {
-    font-size: 2.5rem;
-  }
-
-  .card p {
-    font-size: 1.1rem;
-    max-width: 900px;
-    margin: 0 auto 40px;
-  }
-
-  .passos {
-    gap: 50px;
-  }
-
-  .passo h3 {
-    font-size: 1.4rem;
-  }
-
-  .passo p, .passo ul {
-    font-size: 1.05rem;
-  }
-
-  .tutorial-img {
-    max-width: 800px;
-  }
-
   .video-container {
-    max-width: 900px;
+    max-width: 1100px;
   }
-
   footer {
-    padding: 60px 100px;
-    justify-content: center;
+    padding: 60px 120px;
+    margin-top: auto;
     gap: 100px;
-  }
-
-  footer div {
-    max-width: 400px;
-  }
-
-  footer h3 {
-    font-size: 20px;
-  }
-
-  footer p,
-  footer a {
-    font-size: 15px;
-  }
-
-  .footer-bottom {
-    font-size: 14px;
+    justify-content: center;
+    position: static;
   }
 }
+
 
 
 
