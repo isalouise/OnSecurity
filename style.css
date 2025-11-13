@@ -233,7 +233,7 @@ body {
   margin-bottom: 40px;
 }
 
-/* BOTÃO (mantive como estava para não alterar comportamento global) */
+/* BOTÃO*/
 .btn-iniciar {
   display: flex;
   justify-content: center;
@@ -308,7 +308,7 @@ footer a:hover {
   color: #1b1b1b;
 }
 
-/* Responsivel para telas menores (ajustes específicos para bloco1 mantidos aqui) */
+/* Responsivel para telas menores */
 @media (max-width: 992px) {
   .bloco1 {
     gap: 40px;
@@ -386,6 +386,64 @@ footer a:hover {
   }
 }
 
+@media (min-width: 1600px) {
+  body {
+    font-size: 17px;
+  }
+
+  .nav {
+    max-width: 1600px;
+    padding: 25px 100px;
+  }
+
+  .bloco1 {
+    max-width: 1500px;
+    padding: 100px 8%;
+    gap: 80px;
+  }
+
+  .bloco1 h1 {
+    font-size: 46px;
+  }
+
+  .bloco1 p {
+    font-size: 20px;
+    max-width: 650px;
+  }
+
+  .cadeado {
+    width: 420px;
+  }
+
+  .bloco2 {
+    max-width: 1600px;
+    padding: 80px 60px;
+  }
+
+  .icons-box {
+    gap: 80px;
+  }
+
+  .icon-circle {
+    width: 140px;
+    height: 140px;
+  }
+
+  .bloco3 {
+    max-width: 1400px;
+    padding: 60px 80px;
+  }
+
+  footer {
+    padding: 60px 100px;
+    gap: 100px;
+  }
+
+  .footer-bottom {
+    font-size: 15px;
+  }
+}
+
 /*ANIMAÇÃO*/
 @keyframes fadeIn {
   from {
@@ -397,3 +455,4 @@ footer a:hover {
     transform: translateY(0);
   }
 }
+
