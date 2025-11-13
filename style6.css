@@ -15,40 +15,48 @@ body {
 
 /* NAV */
  
+/* NAVBAR */
 .nav {
-  width: 100%;                   /* ocupa toda a largura da viewport */
-  background-color: #ffffff;     /* fundo que precisa preencher */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(15px, 2vw, 25px) clamp(30px, 5vw, 60px);
+  background-color: #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  position: relative;            /* referência para .menu-links, se necessário */
+  position: relative;
   z-index: 10;
+  max-width: 1920px;
+  margin: 0 auto;
+  width: 100%;
 }
+
 .nav a {
   text-decoration: none;
 }
 
-/* wrapper interno que centraliza o conteúdo sem limitar o fundo */
-.nav-inner {
-  max-width: 1600px;             /* largura máxima do conteúdo (ajuste conforme quiser) */
-  margin: 0 auto;                /* centraliza o conteúdo */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: clamp(15px, 2vw, 25px) clamp(30px, 5vw, 60px); /* controla o espaçamento interno */
-  width: 100%;
+.logo {
+  width: clamp(120px, 10vw, 180px);
+  height: auto;
+  cursor: pointer;
 }
 
-.logo { width: clamp(120px, 10vw, 220px); height: auto; cursor: pointer; }
-.menu-icon { font-size: clamp(28px, 2vw, 36px); cursor: pointer; color: #333; }
+/* hambúrguer */
+.menu-icon {
+  font-size: clamp(28px, 2vw, 34px);
+  cursor: pointer;
+  color: #333;
+  transition: transform 0.3s ease;
+}
 
 .menu-icon:hover {
   transform: scale(1.1);
 }
 
-/* MENU OCULTO - agora posicionado em relação ao .nav-inner */
+/* MENU OCULTO */
 .menu-links {
   position: absolute;
   top: 100%;
-  right: clamp(30px, 5vw, 60px);  /* alinhado ao conteúdo centralizado */
+  right: clamp(20px, 5vw, 60px);
   background-color: #ffffff;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
@@ -58,8 +66,12 @@ body {
   gap: 18px;
   animation: fadeIn 0.4s ease;
 }
-.menu-links.active { display: flex; }
-/* LINKS */
+
+.menu-links.active {
+  display: flex;
+}
+
+/* LINKS DO MENU */
 .menu-links a {
   display: flex;
   align-items: center;
@@ -76,6 +88,7 @@ body {
   transform: translateX(6px);
 }
 
+/* Ícones dos links */
 .menu-links i {
   font-size: 1.3rem;
   color: #6a5acd;
@@ -267,6 +280,7 @@ footer a:hover {
     position: static;
   }
 }
+
 
 
 
