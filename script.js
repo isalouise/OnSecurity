@@ -301,3 +301,31 @@ closeBtn.addEventListener("click", () => {
   gameActive = false;
   window.location.href = "etapas.html"; // redirecionamento
 });
+
+
+// ===== CARREGAR VLibras DINAMICAMENTE =====
+function carregarVLibras() {
+    const script = document.createElement('script');
+    script.src = "https://vlibras.gov.br/app/vlibras-plugin.js";
+    script.async = true;
+
+    script.onload = function () {
+        if (window.VLibras) {
+            new window.VLibras.Widget('https://vlibras.gov.br/app');
+            console.log("VLibras inicializado com sucesso!");
+        } else {
+            console.error("VLibras carregou mas não inicializou.");
+        }
+    };
+
+    script.onerror = function () {
+        console.error("Falha ao carregar o script VLibras.");
+    };
+
+    document.body.appendChild(script);
+}
+
+// Executa quando a página terminar de carregar
+window.addEventListener("DOMContentLoaded", carregarVLibras);
+
+
