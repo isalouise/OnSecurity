@@ -304,28 +304,50 @@ closeBtn.addEventListener("click", () => {
 
 
 // ===== CARREGAR VLibras DINAMICAMENTE =====
-function carregarVLibras() {
-    const script = document.createElement('script');
+// ========================
+// VLibras automático
+// ========================
+
+// Criar o elemento principal do VLibras no DOM
+function criarEstruturaVLibras() {
+    const container = document.createElement("div");
+    container.setAttribute("vw", "");
+    container.classList.add("enabled");
+
+    container.innerHTML = `
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    `;
+
+    document.body.appendChild(container);
+}
+
+// Carregar o script do VLibras dinamicamente
+function carregarScriptVLibras() {
+    const script = document.createElement("script");
     script.src = "https://vlibras.gov.br/app/vlibras-plugin.js";
     script.async = true;
 
     script.onload = function () {
         if (window.VLibras) {
-            new window.VLibras.Widget('https://vlibras.gov.br/app');
-            console.log("VLibras inicializado com sucesso!");
+            new window.VLibras.Widget("https://vlibras.gov.br/app");
+            console.log("VLibras carregado e inicializado!");
         } else {
-            console.error("VLibras carregou mas não inicializou.");
+            console.error("VLibras não inicializou.");
         }
     };
 
     script.onerror = function () {
-        console.error("Falha ao carregar o script VLibras.");
+        console.error("Erro ao carregar o script do VLibras.");
     };
 
     document.body.appendChild(script);
 }
 
-// Executa quando a página terminar de carregar
-window.addEventListener("DOMContentLoaded", carregarVLibras);
-
-
+// Inicializar automaticamente após carregamento da página
+document.addEventListener("DOMContentLoaded", function () {
+    criarEstruturaVLibras();
+    carregarScriptVLibras();
+});
