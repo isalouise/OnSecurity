@@ -304,50 +304,195 @@ closeBtn.addEventListener("click", () => {
 
 
 // ===== CARREGAR VLibras DINAMICAMENTE =====
-// ========================
-// VLibras automático
-// ========================
+// script.js - VLibras automático e robusto
 
-// Criar o elemento principal do VLibras no DOM
-function criarEstruturaVLibras() {
+(function () {
+  const VLIBRAS_URL = "https://vlibras.gov.br/app/vlibras-plugin.js";
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY_MS = 1200; // tempo entre tentativas (aumenta a cada retry)
+
+  function log(...args) {
+    console.log("[VLibrasLoader]", ...args);
+  }
+  function warn(...args) {
+    console.warn("[VLibrasLoader]", ...args);
+  }
+  function error(...args) {
+    console.error("[VLibrasLoader]", ...args);
+  }
+
+  // Detecta se está usando file:// (muitos recursos externos não carregam)
+  function isFileProtocol() {
+    return window.location.protocol === "file:";
+  }
+
+  // Cria a estrutura DOM do VLibras se não existir
+  function criarEstruturaVLibras() {
+    if (document.querySelector("div[vw]")) {
+      log("Estrutura VLibras já existe no DOM.");
+      return;
+    }
     const container = document.createElement("div");
     container.setAttribute("vw", "");
-    container.classList.add("enabled");
-
+    container.className = "vlibras-enabled";
     container.innerHTML = `
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
-        </div>
+      <div vw-access-button class="active" aria-label="Botão de Acessibilidade VLibras"></div>
+      <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+      </div>
     `;
-
+    // Insere no final do body
     document.body.appendChild(container);
-}
+    log("Estrutura VLibras adicionada ao DOM.");
+  }
 
-// Carregar o script do VLibras dinamicamente
-function carregarScriptVLibras() {
-    const script = document.createElement("script");
-    script.src = "https://vlibras.gov.br/app/vlibras-plugin.js";
-    script.async = true;
+  // Adiciona CSS mínimo para garantir visibilidade
+  function aplicarEstilosVLibras() {
+    const id = "vlibras-autostyles";
+    if (document.getElementById(id)) return;
+    const css = `
+      [vw-access-button] {
+        position: fixed !important;
+        right: 18px !important;
+        bottom: 18px !important;
+        width: 56px !important;
+        height: 56px !important;
+        border-radius: 50% !important;
+        z-index: 2147483647 !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.18) !important;
+      }
+      .vlibras-enabled { display: block !important; }
+      .vw-plugin-top-wrapper { z-index: 2147483647 !important; }
+    `;
+    const style = document.createElement("style");
+    style.id = id;
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+    log("Estilos VLibras aplicados.");
+  }
 
-    script.onload = function () {
-        if (window.VLibras) {
-            new window.VLibras.Widget("https://vlibras.gov.br/app");
-            console.log("VLibras carregado e inicializado!");
-        } else {
-            console.error("VLibras não inicializou.");
+  // Tenta carregar o script e inicializar; retorna Promise
+  function carregarVLibrasOnce() {
+    return new Promise((resolve, reject) => {
+      // se já foi carregado, resolve imediatamente
+      if (window.VLibras && typeof window.VLibras.Widget === "function") {
+        log("VLibras já disponível no window.");
+        try {
+          new window.VLibras.Widget("https://vlibras.gov.br/app");
+          log("VLibras (re)inicializado.");
+        } catch (e) {
+          warn("Erro ao (re)inicializar VLibras:", e);
         }
-    };
+        resolve("already-loaded");
+        return;
+      }
 
-    script.onerror = function () {
-        console.error("Erro ao carregar o script do VLibras.");
-    };
+      const script = document.createElement("script");
+      script.src = VLIBRAS_URL;
+      script.async = true;
+      script.defer = true;
 
-    document.body.appendChild(script);
-}
+      let handled = false;
 
-// Inicializar automaticamente após carregamento da página
-document.addEventListener("DOMContentLoaded", function () {
-    criarEstruturaVLibras();
-    carregarScriptVLibras();
-});
+      script.onload = function () {
+        handled = true;
+        log("Script VLibras carregado (onload).");
+        if (window.VLibras && typeof window.VLibras.Widget === "function") {
+          try {
+            new window.VLibras.Widget("https://vlibras.gov.br/app");
+            log("VLibras inicializado com sucesso.");
+            resolve("loaded");
+          } catch (e) {
+            error("Erro ao inicializar Widget VLibras:", e);
+            reject(e);
+          }
+        } else {
+          warn("Script carregado mas window.VLibras ou Widget não encontrado.");
+          // Ainda assim resolve para evitar retries infinitos (chamar reject para tentar retry controlado)
+          reject(new Error("VLibras carregou mas Widget não encontrado"));
+        }
+      };
+
+      script.onerror = function (ev) {
+        handled = true;
+        error("Falha ao carregar script VLibras (onerror).", ev);
+        reject(new Error("Script load error"));
+      };
+
+      // Timeout de segurança para onload/onerror (ex: blocked por adblock)
+      const timeout = setTimeout(() => {
+        if (!handled) {
+          warn("Timeout carregando script VLibras — possivelmente bloqueado por extensão ou rede.");
+          // remove script se estiver no DOM
+          if (script.parentNode) script.parentNode.removeChild(script);
+          reject(new Error("Timeout loading vlibras script (possibly blocked)"));
+        }
+      }, 8000);
+
+      // Append para iniciar
+      document.body.appendChild(script);
+    });
+  }
+
+  // Retry com backoff
+  async function carregarComRetries(maxRetries) {
+    let attempt = 0;
+    while (attempt < maxRetries) {
+      attempt++;
+      try {
+        log(`Tentativa VLibras ${attempt}/${maxRetries}...`);
+        const res = await carregarVLibrasOnce();
+        log("Resultado do carregamento:", res);
+        return;
+      } catch (err) {
+        warn(`Tentativa ${attempt} falhou:`, err && err.message ? err.message : err);
+        if (attempt >= maxRetries) {
+          error("Todas as tentativas falharam.");
+          throw err;
+        }
+        const delay = RETRY_DELAY_MS * attempt;
+        log(`Aguardando ${delay}ms antes da próxima tentativa...`);
+        await new Promise(r => setTimeout(r, delay));
+      }
+    }
+  }
+
+  // Função principal de inicialização
+  async function initVLibrasAuto() {
+    try {
+      if (isFileProtocol()) {
+        warn("Você está usando protocol file:// — teste em um servidor local (ex: Live Server ou python -m http.server). Alguns scripts externos podem não carregar via file://.");
+      }
+      criarEstruturaVLibras();
+      aplicarEstilosVLibras();
+
+      // pequena espera para garantir que o DOM esteja pronto
+      await new Promise(r => setTimeout(r, 50));
+
+      await carregarComRetries(MAX_RETRIES);
+      log("Processo de carregamento do VLibras finalizado (sucesso).");
+    } catch (err) {
+      error("VLibras não pôde ser carregado automaticamente. Mensagens úteis para debug:");
+      error("- Verifique Console (F12) por erros de CSP ou bloqueio por extensão.");
+      error("- Se estiver usando 'file://', rode um servidor local.");
+      error("- Desative temporariamente adblock/privacidade e recarregue.");
+      // imprime uma instrução curta para o usuário copiar/colar
+      error("Copie e cole no chat as linhas do console que aparecerem após '[VLibrasLoader]'.");
+    }
+  }
+
+  // Executa quando DOM estiver pronto
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initVLibrasAuto, { once: true });
+  } else {
+    // DOM já pronto
+    initVLibrasAuto();
+  }
+
+  // Exponha helpers para debug (opcional)
+  window.__VLibrasLoader = {
+    start: initVLibrasAuto,
+    isFileProtocol: isFileProtocol
+  };
+
+})();
