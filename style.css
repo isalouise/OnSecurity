@@ -6,6 +6,14 @@
   scroll-behavior: smooth;
 }
 
+[vw-access-button] {
+  position: fixed !important;
+  right: 15px !important;
+  bottom: 15px !important;
+  z-index: 999999 !important;
+}
+
+
 body {
   background-color: #f6f6f6;
   color: #333;
@@ -453,6 +461,7 @@ footer a:hover {
     transform: translateY(0);
   }
 }
+
 
 
 
